@@ -5,8 +5,11 @@ Docstring
 
 from config import DRIVER, SITE, USERNAME, PASSWORD
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.select import Select
 
-def site_login(driver, site, user, passw):
+
+def site_login(driver: str, site: str, user: str, passw: str) -> None:
     """
     Opens and logs in to the site specified in config.py, with the
     credentials also specified in config.py.
@@ -17,11 +20,11 @@ def site_login(driver, site, user, passw):
     :param site: The login page for the site, specified in config.py as
     a url string.
     :type site: str
-    :param username: The username to login with, specified in config.py.
-    :type username: str
-    :param password: The password to login with, specified in config.py.
-    :type password: str
-    :return:
+    :param user: The username to login with, specified in config.py.
+    :type user: str
+    :param passw: The password to login with, specified in config.py.
+    :type passw: str
+    :return: None
     """
 
     driver = webdriver.Chrome(driver)
@@ -37,7 +40,25 @@ def site_login(driver, site, user, passw):
 
     driver.find_element_by_class_name("btn-login").click()
 
-#driver.get(SITE)
-#assert "rideco" in driver.title
+    driver.get("https://dash.sctc.rideco.com/#/exports")
 
-site_login(DRIVER, SITE, USERNAME, PASSWORD)
+    form = driver.find_element_by_class_name("form-group")
+    form.Select("Driver Fare Export")
+
+    select = Select(driver.find_element_by_class_name("form-group"))
+    print(select.options)
+    print(o.text for o in select.options)  # these are string-s
+    #select.select_by_visible_text(....)
+
+    driver.find_element_by_css_selector("a[href=#/exports]").click()
+    #driver.find_element_by_class_name("fa fa-download fa-fw").click()
+    print("SUCCESS")
+
+
+
+def main():
+    site_login(DRIVER, SITE, USERNAME, PASSWORD)
+
+
+if __name__ == "__main__":
+    main()
