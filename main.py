@@ -1,15 +1,23 @@
 
 """
-Docstring
+A downloader for RideCo reports.
+
+TODO:
+    - Program selector loop
+    - Date selectors
+    - Export button click
+    - Wait for download
+    - Loop for other reports
 """
 
-from config import DRIVER, SITE, USERNAME, PASSWORD
+from config import DRIVER, SITE, USERNAME, PASSWORD, REPORTS_TO_GET
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.select import Select
+import time
 
 
-def site_login(driver: str, site: str, user: str, passw: str) -> None:
+def harvest_report(driver: str, site: str, user: str, passw: str) -> None:
     """
     Opens and logs in to the site specified in config.py, with the
     credentials also specified in config.py.
@@ -40,24 +48,21 @@ def site_login(driver: str, site: str, user: str, passw: str) -> None:
 
     driver.find_element_by_class_name("btn-login").click()
 
+
+    time.sleep(2.5)
     driver.get("https://dash.sctc.rideco.com/#/exports")
 
-    form = driver.find_element_by_class_name("form-group")
-    form.Select("Driver Fare Export")
+    element = driver.find_element_by_id("export-select")
+    for option in element.find_elements_by_tag_name('option'):
+        if option.text == 'Driver Fare Export':
+            option.click()  # select() in earlier versions of webdriver
+            break
 
-    select = Select(driver.find_element_by_class_name("form-group"))
-    print(select.options)
-    print(o.text for o in select.options)  # these are string-s
-    #select.select_by_visible_text(....)
-
-    driver.find_element_by_css_selector("a[href=#/exports]").click()
-    #driver.find_element_by_class_name("fa fa-download fa-fw").click()
     print("SUCCESS")
 
 
-
 def main():
-    site_login(DRIVER, SITE, USERNAME, PASSWORD)
+    harvest_report(DRIVER, SITE, USERNAME, PASSWORD)
 
 
 if __name__ == "__main__":
