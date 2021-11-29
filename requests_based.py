@@ -10,21 +10,18 @@ own program codes from the RideCo site to set up this script.
 import pandas as pd
 import requests
 import csv
+from pathlib import Path
+from config import EXPORT_TYPES, FIRST_DATE, SECOND_DATE, PROGRAMS
 
-first_date = '2021-10-01'
-second_date = '2021-11-05'
-export_types = ['ride', 'fare', 'vehicle_hours']
-tho = 'a0b63f37-a251-4e15-a769-36432ad8c00d'  # Thorold program code
-stc = '268298b4-73bb-415c-8fb5-6a5524ccceb6'  # St. Catharines program code
-programs = [stc, tho]
-programs_dictionary = {'St. Catharines': '268298b4-73bb-415c-8fb5-6a5524ccceb6',
-                       'Thorold': 'a0b63f37-a251-4e15-a769-36432ad8c00d',
-                       }
-date_list = [d.strftime('%Y-%m-%d') for d in pd.date_range(first_date, second_date)]
+cwd = Path.cwd()
+path = str(cwd) + '\\files'
+Path(path).mkdir(parents=True, exist_ok=True)
+
+date_list = [d.strftime('%Y-%m-%d') for d in pd.date_range(FIRST_DATE, SECOND_DATE)]
 
 for date in date_list:
-    for export_type in export_types:
-        for program in programs:
+    for export_type in EXPORT_TYPES:
+        for program in PROGRAMS:
             path = '/dash/rest/exports?' \
                    'export_type=' + export_type + \
                    '&first_date=' + date + \
@@ -51,11 +48,11 @@ for date in date_list:
               headers=headers,
             )
 
-            with open('temp.csv', 'w') as file:
+            with open('files\\temp.csv', 'w') as file:
               file.write(r.text)
 
-            in_fnam = 'temp.csv'
-            out_fnam = file_name
+            in_fnam = 'files\\temp.csv'
+            out_fnam = 'files\\' + file_name
 
             with open(in_fnam) as input, open(out_fnam, 'w', newline='') as output:
                 writer = csv.writer(output)
