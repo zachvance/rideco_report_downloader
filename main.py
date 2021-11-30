@@ -14,8 +14,12 @@ from config import EXPORT_TYPES, FIRST_DATE, PROGRAMS, SECOND_DATE, PAYLOAD, URL
 
 
 with requests.Session() as session:
-    post_response = session.post('https://' + URL_SUBDOMAIN + '.rideco.com/dash-token-auth/', data=PAYLOAD,
-              headers={'accept': 'application/json; version=dash-0.43.1', 'path': '/dash-token-auth/'})
+    post_response = session.post('https://' + URL_SUBDOMAIN + '.rideco.com/dash-token-auth/',
+                                 data=PAYLOAD,
+                                 headers={'accept': 'application/json; version=dash-0.43.1',
+                                          'path': '/dash-token-auth/',
+                                          }
+                                 )
     post_json = post_response.json()
     token = post_json['token']
 
@@ -47,7 +51,7 @@ with requests.Session() as session:
                     'authorization': 'Token ' + token,
                 }
 
-                url = 'https://sctc.rideco.com' + path
+                url = 'https://' + URL_SUBDOMAIN + '.rideco.com' + path
 
                 file_name = date + '-' + date + '-' + export_type + '-' + program + '.csv'
 

@@ -2,7 +2,8 @@ FIRST_DATE = '2021-10-01'
 
 SECOND_DATE = '2021-10-03'
 
-EXPORT_TYPES = ['ride', 'fare', 'vehicle_hours']
+# Possible export types: ride, fare, vehicle_hours
+EXPORT_TYPES = ['ride', 'vehicle_hours']
 
 # Adjust these program codes as required
 program_001 = '268298b4-73bb-415c-8fb5-6a5524ccceb6'  # St. Catharines program code
