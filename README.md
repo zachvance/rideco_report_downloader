@@ -5,8 +5,8 @@ a new temporary file for each before concatenating them all into a single file p
 and removing the temporary files.
 
 Todo:
-- Add authentication
+- Add authentication.
 
 Usage:
 1. Edit config.py to suit your report requirements.
-2. Run main.py
+2. Run main.py.
