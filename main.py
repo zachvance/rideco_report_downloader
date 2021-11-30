@@ -4,25 +4,29 @@ own program codes from the RideCo site to set up this script.
 
 .. todo::
     -   Add authentication
-    -   Stitch downloaded reports together into a single file (per export_type)
 """
 
 import csv
+from glob import glob
 from pathlib import Path
+from shutil import rmtree
+from typing import Any
 
 import pandas as pd
 import requests
+from pandas import DataFrame, Series
+from pandas.core.generic import NDFrame
+from pandas.io.parsers import TextFileReader
 
 from config import EXPORT_TYPES, FIRST_DATE, PROGRAMS, SECOND_DATE
 
 cwd = Path.cwd()
-path = str(cwd) + "\\files"
-Path(path).mkdir(parents=True, exist_ok=True)
+temp_path = str(cwd) + "\\files"
 
 date_list = [d.strftime("%Y-%m-%d") for d in pd.date_range(FIRST_DATE, SECOND_DATE)]
-
-for date in date_list:
-    for export_type in EXPORT_TYPES:
+for export_type in EXPORT_TYPES:
+    Path(temp_path).mkdir(parents=True, exist_ok=True)
+    for date in date_list:
         for program in PROGRAMS:
             path = (
                 "/dash/rest/exports?"
@@ -65,3 +69,14 @@ for date in date_list:
                 for row in csv.reader(input):
                     if any(field.strip() for field in row):
                         writer.writerow(row)
+
+    temp_path = str(cwd) + "\\files"
+    all_files = glob(temp_path + "\\*.csv")
+    li: list[TextFileReader | Series | DataFrame | None | NDFrame | Any] = []
+    for filename in all_files:
+        df = pd.read_csv(filename, index_col=None)
+        li.append(df)
+    df = pd.concat(li, axis=0, ignore_index=True)
+    df.to_csv(export_type + ".csv", index=False)
+
+    rmtree(temp_path)
