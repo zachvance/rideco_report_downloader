@@ -66,10 +66,10 @@ with requests.Session() as session:
 
                 # Remove the blank lines from the CSV.
                 in_file = 'files\\temp.csv'
-                out_file = 'files\\'' + file_name
-                with open(in_file) as input, open(out_file, 'w', newline='') as output:
+                out_file = 'files\\' + file_name
+                with open(in_file) as input_file, open(out_file, 'w', newline='') as output:
                     writer = csv.writer(output)
-                    for row in csv.reader(input):
+                    for row in csv.reader(input_file):
                         if any(field.strip() for field in row):
                             writer.writerow(row)
 
