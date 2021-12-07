@@ -1,4 +1,4 @@
-####RideCo Reports Downloader####
+#### RideCo Reports Downloader
 
 RideCo reports downloader. Set your variables and bypass RideCo's 31-day at-a-time report limit.
 You must retrieve your own program codes from the RideCo site to set up the config. Upon running
