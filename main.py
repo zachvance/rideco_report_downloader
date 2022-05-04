@@ -13,9 +13,15 @@ from pandas.io.parsers import TextFileReader
 from config import EXPORT_TYPES, FIRST_DATE, PROGRAMS, SECOND_DATE, PAYLOAD, URL_SUBDOMAIN
 
 
-def download_reports():
+def download_reports() -> None:
+
+    """
+    Downloads and concatenates exported files from the RideCo. dashboard site based on parameters from the config file.
+    :return: None
+    """
+
     with requests.Session() as session:
-        post_response = session.post('https://' + URL_SUBDOMAIN + '.rideco.com/dash-token-auth/',
+        post_response = session.post(f'https://{URL_SUBDOMAIN}.rideco.com/dash-token-auth/',
                                      data=PAYLOAD,
                                      headers={'accept': 'application/json; version=dash-0.43.1',
                                               'path': '/dash-token-auth/',
@@ -25,38 +31,34 @@ def download_reports():
         token = post_json['token']
 
         cwd = Path.cwd()
-        temp_path = str(cwd) + '\\files'
+        temp_path = f'{str(cwd)}\\files'
 
         date_list = [d.strftime('%Y-%m-%d') for d in pd.date_range(FIRST_DATE, SECOND_DATE)]
         for export_type in EXPORT_TYPES:
-            print('[+] Now downloading %s reports.' % (export_type))
+            print(f'[+] Now downloading {export_type} reports.')
             Path(temp_path).mkdir(parents=True, exist_ok=True)
             for date in date_list:
-                print('[+] Date: %s' % (date))
+                print(f'[+] Date: {date}')
                 for program in PROGRAMS:
                     path = (
-                        '/dash/rest/exports?'
-                        'export_type='
-                        + export_type
-                        + '&first_date='
-                        + date
-                        + '&programs='
-                        + program
-                        + '&second_date='
-                        + date
-                        + '&timezone=America/Toronto'
+                        f'/dash/rest/exports?'
+                        f'export_type={export_type}'
+                        f'&first_date={date}'
+                        f'&programs={program}'
+                        f'&second_date={date}'
+                        f'&timezone=America/Toronto'
                     )
 
                     headers = {
-                        'authority': URL_SUBDOMAIN + '.rideco.com',
+                        'authority': f'{URL_SUBDOMAIN}.rideco.com',
                         'path': path,
                         'accept': 'application/json; version=dash-0.43.1',
-                        'authorization': 'Token ' + token,
+                        'authorization': f'Token {token}',
                     }
 
-                    url = 'https://' + URL_SUBDOMAIN + '.rideco.com' + path
+                    url = f'https://{URL_SUBDOMAIN}.rideco.com{path}'
 
-                    file_name = date + '-' + date + '-' + export_type + '-' + program + '.csv'
+                    file_name = f'{date}-{date}-{export_type}-{program}.csv'
 
                     r = requests.get(
                         url=url,
@@ -64,27 +66,30 @@ def download_reports():
                     )
 
                     # Write the initial file.
-                    with open('files\\temp.csv', 'w') as file:
+                    with open('files\\temp.csv', 'w', encoding='utf-8') as file:
                         file.write(r.text)
 
                     # Remove the blank lines from the CSV.
                     in_file = 'files\\temp.csv'
-                    out_file = 'files\\' + file_name
+                    out_file = f'files\\{file_name}'
                     with open(in_file) as input_file, open(out_file, 'w', newline='') as output:
                         writer = csv.writer(output)
                         for row in csv.reader(input_file):
                             if any(field.strip() for field in row):
                                 writer.writerow(row)
 
-            temp_path = str(cwd) + '\\files'
-            all_files = glob(temp_path + '\\*.csv')
+            temp_path = f'{str(cwd)}\\files'
+            all_files = glob(f'{temp_path}\\*.csv')
             li: list[TextFileReader | Series | DataFrame | None | NDFrame | Any] = []
             for filename in all_files:
                 df = pd.read_csv(filename, index_col=None)
                 li.append(df)
             df = pd.concat(li, axis=0, ignore_index=True)
-            df.to_csv(export_type + '.csv', index=False)
+            # noinspection PyTypeChecker
+            df.to_csv(f'{export_type}.csv', index=False)
 
             rmtree(temp_path)
 
-download_reports()
+
+if __name__ == '__main__':
+    download_reports()
