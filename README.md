@@ -12,3 +12,4 @@ Usage:
 
 Todo:
 - Break up the main 'download_reports()' function into more logical pieces.
+- Maybe add a prompt for the date input insetad of changing the config file for the date range.
