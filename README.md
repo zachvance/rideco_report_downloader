@@ -11,7 +11,7 @@ and removing the temporary files.
 1. Edit config.py to suit your report requirements.
 2. Run main.py.
 
-# Todo:
+## Todo:
 
 - Break up the main 'download_reports()' function into more logical pieces.
 - Maybe add a prompt for the date input insetad of changing the config file for the date range.
