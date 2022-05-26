@@ -1,4 +1,4 @@
-#### RideCo Reports Downloader
+# RideCo Reports Downloader
 
 RideCo reports downloader. Set your variables and bypass RideCo's 31-day at-a-time report limit.
 You must retrieve your own program codes from the RideCo site to set up the config. Upon running
@@ -6,10 +6,12 @@ the script, it will cycle through the specified dates, programs, and export type
 a new temporary file for each before concatenating them all into a single file per export type
 and removing the temporary files.
 
-Usage:
+## Usage:
+
 1. Edit config.py to suit your report requirements.
 2. Run main.py.
 
-Todo:
+# Todo:
+
 - Break up the main 'download_reports()' function into more logical pieces.
 - Maybe add a prompt for the date input insetad of changing the config file for the date range.
