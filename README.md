@@ -1,6 +1,6 @@
 # RideCo Reports Downloader
 
-## What this script does:
+## What this script does
 
 RideCo reports downloader. Set your variables and bypass RideCo's 31-day at-a-time report limit.
 You must retrieve your own program codes from the RideCo site to set up the config. Upon running
@@ -8,12 +8,12 @@ the script, it will cycle through the specified dates, programs, and export type
 a new temporary file for each before concatenating them all into a single file per export type
 and removing the temporary files.
 
-## Usage:
+## Usage
 
 1. Edit config.py to suit your report requirements.
 2. Run main.py.
 
-## Reasoning:
+## Reasoning
 
 The purpose of this script is two-fold: to ease the workload of downloading the required reports each month, and to figure out a work-around for RideCo's report limit.
 
@@ -21,7 +21,7 @@ Part of what made downloading monthly reports from the RideCo dashboard so time 
 
 This script sends a new request query for each program, export type, and day within the specified date range - so only downloading 1 report at a time, regardless of the number of programs, export types, or dates - before concatenating all pieces into a single output file (per export type).
 
-## Todo:
+## Todo
 
 - Break up the main 'download_reports()' function into more logical pieces.
 - Maybe add a prompt for the date input insetad of changing the config file for the date range.
