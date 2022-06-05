@@ -1,5 +1,8 @@
 # RideCo Reports Downloader
 
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+ [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 RideCo reports downloader. Set your variables and bypass RideCo's 31-day at-a-time report limit.
 You must retrieve your own program codes from the RideCo site to set up the config. Upon running
 the script, it will cycle through the specified dates, programs, and export types, creating
