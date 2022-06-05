@@ -15,9 +15,9 @@ and removing the temporary files.
 
 ### Supplying variables via command line arguments:
 
-python menu.py [-help] [--start_date] [--end_date] [--month] [--year] [--username] [--password] [--export_types] [--programs] [--url_subdomain]
+`python menu.py [-help] [--start_date] [--end_date] [--month] [--year] [--username] [--password] [--export_types] [--programs] [--url_subdomain]`
 
-Only 1 pair of either [--start_date] and [--end_date] OR [--month] and [--year] are required.
+Only 1 pair of either `--start_date` and `--end_date` OR `--month` and `--year` are required.
 
 Note that though all arguments are optional, those omitted are filled with defaults from the config file, which may
 cause an error if not set up.
