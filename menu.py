@@ -67,11 +67,13 @@ if __name__ == "__main__":
         month=args.month,
         year=args.year,
     )
-    token = start_session_and_get_token(username=args.username, password=args.password, url_subdomain=args.url_subdomain)
+    token = start_session_and_get_token(
+        username=args.username, password=args.password, url_subdomain=args.url_subdomain
+    )
     download_reports(
         date_list=date_list,
         url_subdomain=args.url_subdomain,
         export_types=args.export_types,
         programs=args.programs,
-        token=token
+        token=token,
     )
