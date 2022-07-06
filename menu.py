@@ -3,14 +3,17 @@ import argparse
 from config import EXPORT_TYPES, PASSWORD, PROGRAMS, URL_SUBDOMAIN, USERNAME
 from main import create_date_range, download_reports
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Download reports from RideCo's dashboard."
     )
 
     parser.add_argument(
-        "-sd", "--start_date", default=None, type=str, help="Starting date for the reports."
+        "-sd",
+        "--start_date",
+        default=None,
+        type=str,
+        help="Starting date for the reports.",
     )
     parser.add_argument(
         "-ed", "--end_date", default=None, type=str, help="Ending date for the reports."
@@ -29,7 +32,11 @@ if __name__ == "__main__":
         help="Your username/email associated with your rideco account.",
     )
     parser.add_argument(
-        "-p", "--password", type=str, default=PASSWORD, help="Your rideco account password."
+        "-p",
+        "--password",
+        type=str,
+        default=PASSWORD,
+        help="Your rideco account password.",
     )
     parser.add_argument(
         "-e",
@@ -55,13 +62,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     date_list = create_date_range(
-        start_date=args.start_date, end_date=args.end_date, month=args.month, year=args.year
+        start_date=args.start_date,
+        end_date=args.end_date,
+        month=args.month,
+        year=args.year,
     )
     download_reports(
         date_list=date_list,
         url_subdomain=args.url_subdomain,
         export_types=args.export_types,
         programs=args.programs,
-        username=args.username,
-        password=args.password,
     )
