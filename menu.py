@@ -1,7 +1,7 @@
 import argparse
 
 from config import EXPORT_TYPES, PASSWORD, PROGRAMS, URL_SUBDOMAIN, USERNAME
-from main import create_date_range, download_reports
+from main import create_date_range, download_reports, start_session_and_get_token
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -67,9 +67,11 @@ if __name__ == "__main__":
         month=args.month,
         year=args.year,
     )
+    token = start_session_and_get_token(username=args.username, password=args.password, url_subdomain=args.url_subdomain)
     download_reports(
         date_list=date_list,
         url_subdomain=args.url_subdomain,
         export_types=args.export_types,
         programs=args.programs,
+        token=token
     )

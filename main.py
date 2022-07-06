@@ -3,7 +3,7 @@ import csv
 from glob import glob
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, List
+from typing import Any
 
 import pandas as pd
 import requests
@@ -17,8 +17,9 @@ from config import (EXPORT_TYPES, FIRST_DATE, PASSWORD, PROGRAMS, SECOND_DATE,
 
 def start_session_and_get_token(
     username=USERNAME, password=PASSWORD, url_subdomain=URL_SUBDOMAIN
-):
+) -> str:
     # Start a session and get a token for future get requests #
+    print("[+] Starting session and getting token.")
     payload = {"username": username, "password": password}
 
     with requests.Session() as session:
@@ -31,39 +32,38 @@ def start_session_and_get_token(
             },
         )
         post_json = post_response.json()
-        print(post_json)
         token = post_json["token"]
         return token
 
 
-def create_temp_path():
+def create_temp_path() -> str:
+    print("[+] Creating a temporary file path.")
     # Create temporary file path
     cwd = get_cwd()
     temp_path = f"{str(cwd)}\\files"
     return temp_path
 
 
-def remove_temp_path(path):
+def remove_temp_path(path) -> None:
+    print("[+] Removing temporary file path.")
     # Remove the temp path
     rmtree(path)
 
 
-def get_cwd():
+def get_cwd() -> Path:
     # Get CWD
     cwd = Path.cwd()
     return cwd
 
 
 def download_reports(
-    date_list, url_subdomain=URL_SUBDOMAIN, export_types=EXPORT_TYPES, programs=PROGRAMS
+    date_list, url_subdomain=URL_SUBDOMAIN, export_types=EXPORT_TYPES, programs=PROGRAMS, token=None,
 ) -> None:
 
     """
     Downloads and concatenates exported files from the RideCo. dashboard site based on parameters from the config file.
     :return: None
     """
-
-    token = start_session_and_get_token()
 
     temp_path = create_temp_path()
 
@@ -105,13 +105,13 @@ def download_reports(
         remove_temp_path(temp_path)
 
 
-def write_initial_file(data):
+def write_initial_file(data) -> None:
     # Write the initial file.
     with open("files\\temp.csv", "w", encoding="utf-8") as file:
         file.write(data.text)
 
 
-def remove_blank_lines_from_csv(file_name):
+def remove_blank_lines_from_csv(file_name) -> None:
     # Remove the blank lines from the CSV.
     in_file = "files\\temp.csv"
     out_file = f"files\\{file_name}"
@@ -122,8 +122,9 @@ def remove_blank_lines_from_csv(file_name):
                 writer.writerow(row)
 
 
-def append_all_temp_files_to_single_file(export_type):
-    # Concatenate all files in the temp path to a single file
+def append_all_temp_files_to_single_file(export_type) -> None:
+    print("[+] Appending temporary files to a single file output.")
+    # Append all files in the temp path to a single file
     cwd = get_cwd()
     temp_path = f"{str(cwd)}\\files"
     all_files = glob(f"{temp_path}\\*.csv")
@@ -138,7 +139,7 @@ def append_all_temp_files_to_single_file(export_type):
 
 def create_date_range(
     start_date: str = None, end_date: str = None, month: int = None, year: int = None
-) -> [List | str]:
+) -> list:
     """
     Creates a list of dates as strings, in the format of 'YYYY-MM-DD'. Requires either the parameters 'start_date' and
     'end_date', or 'month' and 'year' to work.
@@ -169,9 +170,12 @@ def create_date_range(
 
 if __name__ == "__main__":
     dl = create_date_range(start_date=FIRST_DATE, end_date=SECOND_DATE)
+    t = start_session_and_get_token(username=USERNAME, password=PASSWORD)
     download_reports(
         date_list=dl,
         url_subdomain=URL_SUBDOMAIN,
         export_types=EXPORT_TYPES,
         programs=PROGRAMS,
+        token=t,
     )
+    print("[+] Done.")
