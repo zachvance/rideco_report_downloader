@@ -26,5 +26,6 @@ Note that though all arguments are optional, those omitted are filled with defau
 cause an error if not set up.
 
 Todo:
-- Revise the main 'download_reports()' function. It may be able to be broken up into more logical, smaller pieces.
 - More error handling.
+- Revise docstrings and typehints.
+- Tests
